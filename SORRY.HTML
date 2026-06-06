@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Tanvi 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #fdf0f5;
+    --blush: #f5c6c6;
+    --rose: #e07a7a;
+    --deep-rose: #c0504a;
+    --wine: #7d2e3e;
+    --ink: #3a2030;
+    --gold: #c9a84c;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Caveat', cursive;
+    overflow-x: hidden;
+    padding: 40px 20px;
+    position: relative;
+    background: #1a0a14;
+  }
+
+  /* ── BACKGROUND CANVAS ── */
+  #bgCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── FALLING PETALS ── */
+  .petal-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .petal {
+    position: absolute;
+    top: -60px;
+    width: 18px; height: 22px;
+    border-radius: 50% 0 50% 0;
+    opacity: 0.55;
+    animation: petalFall linear infinite;
+  }
+  @keyframes petalFall {
+    0%   { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
+    10%  { opacity: 0.55; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(110vh) rotate(540deg) translateX(60px); opacity: 0; }
+  }
+
+  /* ── SCENE ── */
+  .envelope-scene {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 560px;
+  }
+
+  /* ── ENVELOPE ── */
+  .envelope {
+    width: 100%;
+    background: linear-gradient(160deg, #fce8e8, #faeaea);
+    border-radius: 6px 6px 18px 18px;
+    box-shadow:
+      0 30px 80px rgba(125,46,62,0.45),
+      0 6px 20px rgba(125,46,62,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.6);
+    position: relative;
+    cursor: default;
+    border: 1.5px solid #e8b0b0;
+    transition: transform 0.3s;
+  }
+
+  /* flap triangle */
+  .flap {
+    width: 100%;
+    height: 160px;
+    position: relative;
+    overflow: hidden;
+  }
+  .flap::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    border-left: 280px solid transparent;
+    border-right: 280px solid transparent;
+    border-top: 160px solid #f0aeb0;
+    transition: transform 0.9s cubic-bezier(0.4,0,0.2,1), border-top-color 0.3s;
+    transform-origin: top center;
+  }
+  .envelope.open .flap::before {
+    transform: rotateX(180deg);
+    border-top-color: #e8b0b0;
+  }
+
+  /* wax seal — hidden when flower is present */
+  .flap-wax {
+    position: absolute;
+    top: 60px; left: 50%; transform: translateX(-50%);
+    width: 52px; height: 52px;
+    background: var(--wine);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 3px 12px rgba(125,46,62,0.4);
+    z-index: 2;
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .envelope.open .flap-wax { opacity: 0; transform: translateX(-50%) scale(0.5); }
+
+  /* envelope body */
+  .envelope-body {
+    background: linear-gradient(160deg, #fce8e8, #fdf0f0);
+    height: 200px;
+    position: relative;
+    border-radius: 0 0 16px 16px;
+    border-top: 1.5px solid #e8b0b0;
+    overflow: hidden;
+  }
+  .envelope-body::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0; height: 100px;
+    background: linear-gradient(to top right, #f5c6c6 50%, transparent 50%);
+    border-radius: 0 0 0 16px;
+  }
+  .envelope-body::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0; height: 100px;
+    background: linear-gradient(to top left, #f0b8b8 50%, transparent 50%);
+    border-radius: 0 0 16px 0;
+  }
+
+  /* ── ENVELOPE LABEL ── */
+  .envelope-label {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    line-height: 1.1;
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .envelope.open .envelope-label { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(0.75); }
+  .for-text {
+    font-family: 'Caveat', cursive;
+    font-size: 1rem;
+    color: var(--rose);
+    letter-spacing: 4px;
+    opacity: 0.85;
+  }
+  .tanvi-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--wine);
+    text-shadow: 0 2px 10px rgba(125,46,62,0.15);
+    letter-spacing: 2px;
+  }
+  .heart-beat {
+    font-size: 1.3rem;
+    margin-top: 4px;
+    animation: hb 1.4s ease-in-out infinite;
+  }
+  @keyframes hb {
+    0%,100%{transform:scale(1)} 14%{transform:scale(1.3)} 28%{transform:scale(1)} 42%{transform:scale(1.18)} 56%{transform:scale(1)}
+  }
+
+  /* ── SVG FLOWER SEAL (centred knot) ── */
+  .flower-wrap {
+    position: relative;
+    z-index: 20;
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 4px;
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), filter 0.3s, opacity 0.3s;
+    filter: drop-shadow(0 3px 10px rgba(125,46,62,0.6));
+    animation: slowSpin 8s linear infinite;
+  }
+  @keyframes slowSpin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .flower-wrap:hover {
+    filter: drop-shadow(0 6px 20px rgba(224,122,122,0.9));
+    animation: none;
+    transform: scale(1.18) rotate(15deg);
+  }
+  .envelope.open .flower-wrap {
+    opacity: 0;
+    pointer-events: none;
+    animation: none;
+    transform: scale(0.3) rotate(40deg);
+  }
+  .flower-hint {
+    font-family: 'Caveat', cursive;
+    font-size: 0.95rem;
+    color: rgba(255,200,210,0.8);
+    white-space: nowrap;
+    animation: pulse 2s ease-in-out infinite;
+    pointer-events: none;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+  .envelope.open .flower-hint { display: none; }
+
+  @keyframes pulse {
+    0%,100%{opacity:1;transform:translateX(-50%) scale(1)}
+    50%{opacity:0.55;transform:translateX(-50%) scale(0.97)}
+  }
+
+  /* ── LETTER CARD ── */
+  .letter-card {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.85);
+    width: min(500px, 92vw);
+    overflow: hidden;
+    background: #fffdf9;
+    border-radius: 12px;
+    box-shadow: 0 20px 70px rgba(0,0,0,0.55), 0 4px 20px rgba(125,46,62,0.3);
+    padding: 22px 24px 18px;
+    border: 1px solid #f5dcd0;
+    z-index: 300;
+    opacity: 0;
+  }
+  .letter-card.visible {
+    display: block;
+    animation: letterPop 0.65s cubic-bezier(0.34,1.4,0.64,1) forwards;
+  }
+  @keyframes letterPop {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.8) translateY(30px); }
+    to   { opacity: 1; transform: translate(-50%, -50%) scale(1) translateY(0); }
+  }
+
+  /* dim overlay behind letter */
+  .letter-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10,2,10,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 299;
+  }
+  .letter-backdrop.visible { display: block; animation: fadeIn 0.4s forwards; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  .letter-lines {
+    position: absolute;
+    inset: 58px 24px 24px;
+    background-image: repeating-linear-gradient(transparent, transparent 35px, #f0e0d8 35px, #f0e0d8 36px);
+    pointer-events: none;
+  }
+  .letter-date {
+    font-family: 'Caveat', cursive;
+    color: var(--rose);
+    font-size: 0.9rem;
+    text-align: right;
+    margin-bottom: 6px;
+    position: relative; z-index: 1;
+  }
+  .letter-salutation {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.35rem;
+    color: var(--wine);
+    margin-bottom: 8px;
+    position: relative; z-index: 1;
+  }
+  .letter-body {
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    line-height: 1.75rem;
+    color: var(--ink);
+    position: relative; z-index: 1;
+  }
+  .letter-sign {
+    margin-top: 10px;
+    text-align: right;
+    position: relative; z-index: 1;
+  }
+  .letter-sign .closing {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--rose);
+    font-size: 1.1rem;
+  }
+  .letter-sign .name {
+    font-family: 'Caveat', cursive;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--wine);
+    display: block;
+    margin-top: 2px;
+  }
+  .letter-deco {
+    text-align: center;
+    margin: 6px 0 8px;
+    font-size: 1.1rem;
+    letter-spacing: 5px;
+    position: relative; z-index: 1;
+  }
+
+
+
+  /* ── POP HEARTS ── */
+  .pop-hearts { position: absolute; inset: 0; pointer-events: none; z-index: 20; display: none; }
+  .pop-hearts.active { display: block; }
+  .pop-heart {
+    position: absolute;
+    font-size: 1.5rem;
+    animation: popHeart 1.2s ease-out forwards;
+  }
+  @keyframes popHeart {
+    0%   { transform: translateY(0) scale(0.5); opacity: 1; }
+    100% { transform: translateY(-130px) scale(1.3); opacity: 0; }
+  }
+
+  /* ── CONFETTI ── */
+  canvas#confetti { position: fixed; inset: 0; pointer-events: none; z-index: 100; }
+
+  /* ── THANK YOU OVERLAY ── */
+  .thankyou-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .thankyou-overlay.show {
+    display: flex;
+    animation: overlayIn 0.8s forwards;
+  }
+  @keyframes overlayIn {
+    from { background: rgba(20,5,15,0); backdrop-filter: blur(0px); }
+    to   { background: rgba(20,5,15,0.88); backdrop-filter: blur(10px); }
+  }
+  .thankyou-box {
+    text-align: center;
+    padding: 50px 36px;
+    animation: tyPop 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
+  }
+  @keyframes tyPop {
+    from { transform: scale(0.6) translateY(40px); opacity: 0; }
+    to   { transform: scale(1) translateY(0); opacity: 1; }
+  }
+  .ty-deco { font-size: 4rem; margin-bottom: 14px; animation: hb 1.4s ease-in-out infinite; }
+  .ty-title { font-family: 'Caveat', cursive; font-size: 1.5rem; color: #f5c6c6; letter-spacing: 1px; }
+  .ty-sub   { font-family: 'Caveat', cursive; font-size: 1.2rem; color: #f5c6c6; opacity: 0.7; }
+  .ty-name  {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 3.4rem;
+    font-weight: 600;
+    color: #fff0f5;
+    margin: 8px 0 18px;
+    text-shadow: 0 0 30px rgba(224,122,122,0.6);
+  }
+  .ty-msg   { font-family: 'Caveat', cursive; font-size: 1.35rem; color: #f8dce4; line-height: 1.9; margin-bottom: 20px; }
+  .ty-hearts { font-size: 1.8rem; letter-spacing: 6px; }
+
+  /* close btn inside letter */
+  .letter-close-btn {
+    text-align: right;
+    margin-top: 10px;
+    font-family: 'Caveat', cursive;
+    font-size: 1rem;
+    color: var(--rose);
+    cursor: pointer;
+    animation: pulse 2s ease-in-out infinite;
+    user-select: none;
+  }
+  .letter-close-btn:hover { color: var(--wine); }
+</style>
+</head>
+<body>
+
+<!-- Romantic background canvas -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- Falling petals layer (JS-generated) -->
+<div class="petal-layer" id="petalLayer"></div>
+
+<!-- Confetti canvas -->
+<canvas id="confetti"></canvas>
+
+<div class="envelope-scene">
+  <div class="envelope" id="envelope">
+    <div class="flap">
+      <div class="flap-wax">💌</div>
+    </div>
+
+    <div class="envelope-body">
+      <!-- Flower + label stacked, centred at the crease -->
+      <div class="envelope-label" id="envelopeLabel">
+        <div class="flower-wrap" id="flowerBtn" onclick="openEnvelope()" title="Click to open">
+          <svg width="52" height="52" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="45" cy="22" rx="10" ry="20" fill="#f9a8c9" opacity="0.92" transform="rotate(0 45 45)"/>
+            <ellipse cx="45" cy="22" rx="10" ry="20" fill="#f48fb1" opacity="0.85" transform="rotate(45 45 45)"/>
+            <ellipse cx="45" cy="22" rx="10" ry="20" fill="#f9a8c9" opacity="0.92" transform="rotate(90 45 45)"/>
+            <ellipse cx="45" cy="22" rx="10" ry="20" fill="#f48fb1" opacity="0.85" transform="rotate(135 45 45)"/>
+            <ellipse cx="45" cy="22" rx="10" ry="20" fill="#f9a8c9" opacity="0.92" transform="rotate(180 45 45)"/>
+            <ellipse cx="45" cy="22" rx="10" ry="20" fill="#f48fb1" opacity="0.85" transform="rotate(225 45 45)"/>
+            <ellipse cx="45" cy="22" rx="10" ry="20" fill="#f9a8c9" opacity="0.92" transform="rotate(270 45 45)"/>
+            <ellipse cx="45" cy="22" rx="10" ry="20" fill="#f48fb1" opacity="0.85" transform="rotate(315 45 45)"/>
+            <circle cx="45" cy="45" r="14" fill="#fff0c8" stroke="#f0c060" stroke-width="1.5"/>
+            <circle cx="45" cy="45" r="9"  fill="#ffd54f"/>
+            <circle cx="45" cy="45" r="4"  fill="#f4a000"/>
+          </svg>
+        </div>
+        <span class="for-text">for</span>
+        <span class="tanvi-text">Tanvi</span>
+        <span class="heart-beat">🫀</span>
+        <span class="flower-hint">click the flower to open</span>
+      </div>
+    </div>
+
+    <!-- Backdrop -->
+    <div class="letter-backdrop" id="letterBackdrop"></div>
+
+    <!-- Letter card -->
+    <div class="letter-card" id="letterCard">
+      <div class="letter-lines"></div>
+      <div class="letter-date">June 7, 2026 🌸</div>
+      <div class="letter-salutation">My dearest Tanvi,</div>
+      <div class="letter-body">
+        <p>
+           I know I messed up, and no words feel big enough
+          to say how truly sorry I am😞.<br><br>
+          YAAR MERA ESSA KOI INTENTION NHI THA MA TOU 
+          BAS EHK FUNNY NAME DENE KA TRY KAR RHA THA.
+          IDK TUMHARA MOOD USSE VJAH SE KHARAB HUA YA 
+          KUCH HOR REASON HA BUT AGAR USS VJAH SE HUA 
+          TOU I'M REALLY SORRY😭.
+          <br><br>
+          AND YAAR TUMH GUSSE ME BHI BAAT KAR SAKTI 
+          CHAHE RUDELY KRO YA JAISE BHI U CAN TALK 
+          ABOUT IT HAR BAR GUSSE ME AKELE BAITHKE 
+          SOCHHNA IS NOT GOOD. CHAHE GUSSA MERE PE NIKALDO
+          NO PROBLEM JISS MARZI PE GUSA AYA HO MERE PE NIKAL DO
+          
+          BUT ATLEAST BAAT KRO USSE BETTER LAGEGA TUMHE.
+        </p>
+      </div>
+      <div class="letter-deco">🌸 💕 🌸</div>
+      <div class="letter-sign">
+        <span class="closing">Always & forever yours,</span>
+        <span class="name">Tere wala 💝</span>
+      </div>
+      <div class="letter-close-btn" onclick="closeEnvelope()">🌸 tap to close 🌸</div>
+    </div>
+
+    <div class="pop-hearts" id="popHearts"></div>
+  </div>
+
+
+</div>
+
+<!-- Thank you overlay -->
+<div class="thankyou-overlay" id="thankyouOverlay">
+  <div class="thankyou-box">
+    <div class="ty-deco">💌</div>
+    <div class="ty-title">Thank you for reading</div>
+    <div class="ty-sub">my letter,</div>
+    <div class="ty-name">Tanvi 🫀</div>
+    <div class="ty-msg">I hope it reached your heart<br>the way you live in mine. 🌸</div>
+    <div class="ty-hearts">💕 &nbsp; 🌷 &nbsp; 💕</div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   ROMANTIC BACKGROUND — starfield + bokeh + gradient
+═══════════════════════════════════════════ */
+(function() {
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Stars
+  const stars = Array.from({length: 160}, () => ({
+    x: Math.random(),
+    y: Math.random(),
+    r: 0.4 + Math.random() * 1.4,
+    alpha: 0.3 + Math.random() * 0.7,
+    speed: 0.003 + Math.random() * 0.008,
+    phase: Math.random() * Math.PI * 2,
+  }));
+
+  // Bokeh blobs
+  const boks = Array.from({length: 18}, () => ({
+    x: Math.random(),
+    y: Math.random(),
+    r: 30 + Math.random() * 90,
+    alpha: 0.04 + Math.random() * 0.10,
+    color: Math.random() < 0.5
+      ? `rgba(224,122,122,` // rose
+      : `rgba(180,80,100,`, // wine
+    dx: (Math.random() - 0.5) * 0.00015,
+    dy: (Math.random() - 0.5) * 0.00015,
+  }));
+
+  let t = 0;
+  function draw() {
+    const W = canvas.width, H = canvas.height;
+
+    // deep romantic gradient
+    const grad = ctx.createRadialGradient(W*0.5, H*0.4, 0, W*0.5, H*0.5, W*0.75);
+    grad.addColorStop(0,   '#3d0d22');
+    grad.addColorStop(0.5, '#200818');
+    grad.addColorStop(1,   '#0e0410');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    // bokeh
+    boks.forEach(b => {
+      b.x += b.dx; b.y += b.dy;
+      if (b.x < 0) b.x = 1; if (b.x > 1) b.x = 0;
+      if (b.y < 0) b.y = 1; if (b.y > 1) b.y = 0;
+      const g = ctx.createRadialGradient(b.x*W, b.y*H, 0, b.x*W, b.y*H, b.r);
+      g.addColorStop(0,   b.color + b.alpha + ')');
+      g.addColorStop(1,   b.color + '0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(b.x*W, b.y*H, b.r, 0, Math.PI*2);
+      ctx.fill();
+    });
+
+    // stars
+    t += 0.016;
+    stars.forEach(s => {
+      const a = s.alpha * (0.5 + 0.5 * Math.sin(t * s.speed * 60 + s.phase));
+      ctx.save();
+      ctx.globalAlpha = a;
+      ctx.fillStyle = '#fff8f8';
+      ctx.beginPath();
+      ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ═══════════════════════════════════════════
+   FALLING ROSE PETALS
+═══════════════════════════════════════════ */
+(function() {
+  const layer = document.getElementById('petalLayer');
+  const colors = ['#f9a8c9','#f48fb1','#f5c6c6','#e57fa0','#fdd0de','#c9687e'];
+  for (let i = 0; i < 22; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.width  = (10 + Math.random() * 16) + 'px';
+    p.style.height = (12 + Math.random() * 20) + 'px';
+    p.style.borderRadius = Math.random() < 0.5 ? '50% 0 50% 0' : '0 50% 0 50%';
+    p.style.animationDuration  = (7 + Math.random() * 10) + 's';
+    p.style.animationDelay     = (-Math.random() * 15)    + 's';
+    p.style.transform = `rotate(${Math.random()*360}deg)`;
+    layer.appendChild(p);
+  }
+})();
+
+/* ═══════════════════════════════════════════
+   ENVELOPE LOGIC
+═══════════════════════════════════════════ */
+const heartEmojis = ['💕','💖','🌸','💗','🌷','❤️','✨','💓'];
+let state = 'closed';
+
+function openEnvelope() {
+  if (state !== 'closed') return;
+  state = 'open';
+
+  const env     = document.getElementById('envelope');
+  const card    = document.getElementById('letterCard');
+  const closeBtn= document.getElementById('closeBtn');
+  const popH    = document.getElementById('popHearts');
+
+  env.classList.add('open');
+
+  // burst hearts
+  popH.classList.add('active');
+  for (let i = 0; i < 12; i++) {
+    const h = document.createElement('div');
+    h.className = 'pop-heart';
+    h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+    h.style.left  = (15 + Math.random() * 70) + '%';
+    h.style.top   = (10 + Math.random() * 50) + '%';
+    h.style.animationDelay = (Math.random() * 0.5) + 's';
+    popH.appendChild(h);
+  }
+
+  setTimeout(() => {
+    card.classList.add('visible');
+    closeBtn.classList.add('visible');
+    launchConfetti();
+  }, 450);
+}
+
+function closeEnvelope() {
+  if (state !== 'open') return;
+  state = 'thankyou';
+
+  const env     = document.getElementById('envelope');
+  const card    = document.getElementById('letterCard');
+  const closeBtn= document.getElementById('closeBtn');
+  const overlay = document.getElementById('thankyouOverlay');
+
+  card.style.transition = 'transform 0.6s cubic-bezier(0.4,0,0.2,1), opacity 0.5s';
+  card.style.transform  = 'translateX(-50%) translateY(90px)';
+  card.style.opacity    = '0';
+
+  setTimeout(() => {
+    env.classList.remove('open');
+    closeBtn.classList.remove('visible');
+    card.classList.remove('visible');
+    card.style.transform = '';
+    card.style.opacity   = '';
+    card.style.transition= '';
+  }, 500);
+
+  setTimeout(() => {
+    overlay.classList.add('show');
+  }, 1050);
+}
+
+/* ═══════════════════════════════════════════
+   CONFETTI
+═══════════════════════════════════════════ */
+function launchConfetti() {
+  const canvas = document.getElementById('confetti');
+  const ctx    = canvas.getContext('2d');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const colors = ['#e07a7a','#f5c6c6','#c9a84c','#7d2e3e','#f0b8b8','#fff0f0','#f48fb1'];
+  const pieces = Array.from({length: 130}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height * 0.5 - canvas.height * 0.25,
+    r: 4 + Math.random() * 5,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    vx: (Math.random() - 0.5) * 6,
+    vy: 1 + Math.random() * 4,
+    alpha: 1,
+    rot: Math.random() * Math.PI,
+    rotV: (Math.random() - 0.5) * 0.18,
+  }));
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.07;
+      p.rot += p.rotV; p.alpha -= 0.007;
+      if (p.alpha <= 0) return;
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r * 0.55);
+      ctx.restore();
+    });
+    frame++;
+    if (frame < 200) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  draw();
+}
+</script>
+</body>
+</html>
